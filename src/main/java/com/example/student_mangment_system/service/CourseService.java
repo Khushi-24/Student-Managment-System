@@ -15,4 +15,12 @@ public interface CourseService {
     public Course deleteCourse(Long courseId);
 
     public Course updateCourse(Course course);
+
+    void addStudentIntoCourse(Long studentId, Long courseId);
+
+    void deleteStudentFromCourse(Long studentId, Long courseId);
+
+    void deleteStudentByStudentId(Long studentId);
+
+    void deleteCourseByCourseId(Long courseId);
 }

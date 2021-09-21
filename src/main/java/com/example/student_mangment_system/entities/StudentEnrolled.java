@@ -14,17 +14,26 @@ import javax.persistence.*;
 @ToString
 
 @Table(name= "join_table")
-public class Student_Enrolled  {
+public class StudentEnrolled {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long join_table_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="courseid", referencedColumnName = "id")
+    @JoinColumn(name ="courseId", referencedColumnName = "courseId")
     private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studentid", referencedColumnName = "id")
+    @JoinColumn(name = "studentId", referencedColumnName = "studentId")
     private  Student student;
+
+    public StudentEnrolled(Student student, Course course) {
+        this.student = student;
+        this.course = course;
+    }
+
+//    public StudentEnrolled(Student student){
+//        this.student = student;
+//    }
 }
