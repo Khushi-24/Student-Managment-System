@@ -15,23 +15,19 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
-@Table(name="student")
-public class Student {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "studentId")
-    private Long studentId;
 
-    @Column(name = "stname")
-    private String stname;
+    @Column(name = "teacherId")
+    private Long teacherId;
 
-    @Column(name = "division")
-    private String division;
+    @Column(name = "name")
+    private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "teacher")
     private Set<StudentEnrolled> studentEnrolledSet = new HashSet<>();
 
 }

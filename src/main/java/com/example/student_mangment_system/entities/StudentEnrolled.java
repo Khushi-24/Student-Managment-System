@@ -28,12 +28,18 @@ public class StudentEnrolled {
     @JoinColumn(name = "studentId", referencedColumnName = "studentId")
     private  Student student;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacherId", referencedColumnName = "teacherId")
+    private Teacher teacher;
+
     public StudentEnrolled(Student student, Course course) {
         this.student = student;
         this.course = course;
     }
 
-//    public StudentEnrolled(Student student){
-//        this.student = student;
-//    }
+    public StudentEnrolled(Teacher teacher, Student student, Course course){
+        this.student = student;
+        this.course = course;
+        this.teacher = teacher;
+    }
 }

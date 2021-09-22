@@ -4,22 +4,20 @@ import com.example.student_mangment_system.entities.StudentEnrolled;
 import com.example.student_mangment_system.service.CourseService;
 import com.example.student_mangment_system.service.StudentEnrolledService;
 import com.example.student_mangment_system.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentEnrolledController {
 
-    @Autowired
-    private StudentEnrolledService service;
+    private final StudentEnrolledService service;
 
-    @Autowired
-    private CourseService courseService;
+    private final CourseService courseService;
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
 
     @PostMapping("/enrollment")
 //    @PostMapping("/courses/{courseId}/students/{studentId}")

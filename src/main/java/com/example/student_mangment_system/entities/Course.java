@@ -21,8 +21,13 @@ public class Course
 {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "courseId")
     private Long courseId;
+
+    @Column(name = "coursename")
     private String coursename;
+
+    @Column(name = "description")
     private String description;
 
     @JsonIgnore

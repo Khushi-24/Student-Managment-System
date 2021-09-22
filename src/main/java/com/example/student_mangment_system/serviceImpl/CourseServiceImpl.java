@@ -3,9 +3,11 @@ package com.example.student_mangment_system.serviceImpl;
 import com.example.student_mangment_system.entities.Course;
 import com.example.student_mangment_system.entities.Student;
 import com.example.student_mangment_system.entities.StudentEnrolled;
+import com.example.student_mangment_system.entities.Teacher;
 import com.example.student_mangment_system.repository.CourseRepository;
 import com.example.student_mangment_system.repository.StudentEnrollmentRepository;
 import com.example.student_mangment_system.repository.StudentRepository;
+import com.example.student_mangment_system.repository.TeacherRepository;
 import com.example.student_mangment_system.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private final StudentEnrollmentRepository studentEnrollmentRepository;
 
     @Override
@@ -33,15 +36,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getOneCourse(Long courseId) {
-        Course entity = courseRepository.findById(courseId).get();
-        return entity;
-    }
-
-    @Override
-    public Course deleteCourse(Long courseId) {
-        Course entity = courseRepository.getOne(courseId);
-        courseRepository.delete(entity);
-        return null;
+        return courseRepository.findById(courseId).orElseThrow();
     }
 
     @Override
@@ -51,15 +46,29 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void addStudentIntoCourse(Long studentId, Long courseId) {
+    public void addStudentAndTeacherIntoCourse(Long teacherId, Long studentId, Long courseId) {
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student does not exist."));
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course does not exist"));
 
-        StudentEnrolled studentEnrolled = new StudentEnrolled(student, course);
-        if (!studentEnrollmentRepository.existsByCourseAndStudent(course, student)) {
+        StudentEnrolled studentEnrolled = new StudentEnrolled(teacher, student, course);
+        if(!studentEnrollmentRepository.existsByCourseAndStudentAndTeacher(course, student, teacher)){
             studentEnrollmentRepository.save(studentEnrolled);
         }
+    }
 
+    @Override
+    public void deleteStudentAndTeacherFromCourse(Long teacherId, Long studentId, Long courseId) {
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student does not exist."));
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course does not exist"));
+
+        if(studentEnrollmentRepository.existsByCourseAndStudentAndTeacher(course, student, teacher)){
+//            studentEnrollmentRepository.deleteByCourseCourseIdAndStudentStudentIdAndTeacherTeacherId(teacherId, studentId, courseId);
+            studentEnrollmentRepository.deleteByCourseIdAndStudentIdAndTeacherId(teacherId, studentId, courseId);
+        }else{
+            throw new EntityNotFoundException("No such entry exists.");
+        }
     }
 
     @Override
@@ -67,8 +76,7 @@ public class CourseServiceImpl implements CourseService {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student does not exist."));
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course does not exist"));
 //        List<StudentEnrolled> studentEnrolledList = studentEnrollmentRepository.findAll();
-        StudentEnrolled studentEnrolled = new StudentEnrolled(student, course);
-//        if (studentEnrollmentRepository.existsByCourseAndStudent(course, student)) {
+        //        if (studentEnrollmentRepository.existsByCourseAndStudent(course, student)) {
 //            StudentEnrolled entity = studentEnrollmentRepository.findById(studentEnrolled.getJoin_table_id()).get();
 //            studentEnrollmentRepository.delete(entity);
 //        }
@@ -82,27 +90,32 @@ public class CourseServiceImpl implements CourseService {
         } else {
             throw new EntityNotFoundException("No such entry exists.");
         }
-
-
     }
 
     @Override
-    public void deleteStudentByStudentId(Long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student does not exist."));
-        //       StudentEnrolled studentEnrolled = new StudentEnrolled(student);
-        if (studentEnrollmentRepository.existsByStudentStudentId(studentId)) {
-            studentEnrollmentRepository.deleteStudentById(studentId);
-        } else {
-            throw new EntityNotFoundException("Student with" + studentId + "Doesn't Exists");
-        }
-        //System.out.println(studentId);
+    public void deleteCourse(Long courseId) {
+        deleteCourseByCourseId(courseId);
+        Course entity = courseRepository.getOne(courseId);
+        courseRepository.delete(entity);
     }
 
     @Override
     public void deleteCourseByCourseId(Long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course does not exist"));
         studentEnrollmentRepository.deleteByCourseId(courseId);
-        courseRepository.deleteById(courseId);
+        //courseRepository.deleteById(courseId);
     }
 
 }
+
+
+//    @Override
+//    public void addStudentIntoCourse(Long studentId, Long courseId) {
+//        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student does not exist."));
+//        Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course does not exist"));
+//
+//        StudentEnrolled studentEnrolled = new StudentEnrolled(student, course);
+//        if (!studentEnrollmentRepository.existsByCourseAndStudent(course, student)) {
+//            studentEnrollmentRepository.save(studentEnrolled);
+//        }
+//    }

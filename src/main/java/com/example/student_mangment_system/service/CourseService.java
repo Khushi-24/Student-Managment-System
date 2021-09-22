@@ -6,21 +6,23 @@ import java.util.List;
 
 public interface CourseService {
 
-    public List<Course> getCourses();
+    List<Course> getCourses();
 
-    public Course addCourses(Course course);
+    Course addCourses(Course course);
 
-    public Course getOneCourse(Long courseId);
+    Course getOneCourse(Long courseId);
 
-    public Course deleteCourse(Long courseId);
+    void deleteCourse(Long courseId);
 
-    public Course updateCourse(Course course);
+    Course updateCourse(Course course);
 
-    void addStudentIntoCourse(Long studentId, Long courseId);
+ //   void addStudentIntoCourse(Long studentId, Long courseId);
 
     void deleteStudentFromCourse(Long studentId, Long courseId);
 
-    void deleteStudentByStudentId(Long studentId);
-
     void deleteCourseByCourseId(Long courseId);
+
+    void addStudentAndTeacherIntoCourse(Long teacherId, Long studentId, Long courseId);
+
+    void deleteStudentAndTeacherFromCourse(Long teacherId, Long studentId, Long courseId);
 }
