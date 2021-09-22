@@ -1,5 +1,7 @@
 package com.example.student_mangment_system.serviceImpl;
 
+import com.example.student_mangment_system.customException.BadRequestException;
+import com.example.student_mangment_system.customException.NoRecordFoundException;
 import com.example.student_mangment_system.entities.Teacher;
 import com.example.student_mangment_system.repository.StudentEnrollmentRepository;
 import com.example.student_mangment_system.repository.TeacherRepository;
@@ -20,37 +22,58 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<Teacher> getTeachers() {
-        return teacherRepository.findAll();
+        List<Teacher> teacher= teacherRepository.findAll();
+        if(teacher.isEmpty()){
+            throw new NoRecordFoundException("Teacher list is empty");
+        }
+        else {
+            return teacher;
+        }
     }
 
     @Override
     public Teacher addTeacher(Teacher teacher) {
-        return teacherRepository.save(teacher);
-    }
-
-    @Override
-    public Teacher getOneteacher(Long teacherId) {
-        Teacher teacher = teacherRepository.findById(teacherId).get();
-        return teacher;
+        if(teacher.getName().isEmpty() || teacher.getName().isBlank()){
+            throw new BadRequestException("Please enter teacher name.");
+        }
+        else{
+            return teacherRepository.save(teacher);
+        }
     }
 
     @Override
     public Teacher updateTeacher(Teacher teacher) {
-        return teacherRepository.save(teacher);
+        if(teacher.getName().isEmpty() || teacher.getName().isBlank()){
+            throw new BadRequestException("Please enter teacher name.");
+        }
+        else{
+            return teacherRepository.save(teacher);
+        }
     }
 
     @Override
     public Teacher deleteTeacher(Long teacherId) {
-        Teacher teacher1 = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
-        deleteTeacherfromJoinTable(teacherId);
-        Teacher teacher = teacherRepository.getOne(teacherId);
-        teacherRepository.delete(teacher);
+        if(teacherId == null){
+            throw new BadRequestException("Id can't be null");
+        }
+        else{
+            Teacher teacher1 = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
+            deleteTeacherfromJoinTable(teacherId);
+            Teacher teacher = teacherRepository.getOne(teacherId);
+            teacherRepository.delete(teacher);
+        }
+
         return null;
     }
 
     @Override
     public void deleteTeacherfromJoinTable(Long teacherId) {
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
-        studentEnrollmentRepository.deleteByTeacherId(teacherId);
+        if(teacherId == null){
+            throw new BadRequestException("Id can't be null");
+        }
+        else {
+            Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher does not exist."));
+            studentEnrollmentRepository.deleteByTeacherId(teacherId);
+        }
     }
 }

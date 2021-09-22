@@ -35,11 +35,11 @@ public class StudentController {
     }
 
 
-    @DeleteMapping("/student/{studentId}")
-    public  ResponseEntity<?> deleteStudent(@PathVariable Long studentId){
-        studentService.deleteStudent(studentId);
-        return ResponseEntity.ok("Student with studentId= " + studentId + " deleted successfully from all tables.");
-    }
+//    @DeleteMapping("/student/{studentId}")
+//    public  ResponseEntity<?> deleteStudent(@PathVariable Long studentId){
+//        studentService.deleteStudent(studentId);
+//        return ResponseEntity.ok("Student with studentId= " + studentId + " deleted successfully from all tables.");
+//    }
 
     @DeleteMapping("/deleteStudent/{studentId}")
     public ResponseEntity<?> deleteStudentByStudentId(@PathVariable("studentId") Long studentId){

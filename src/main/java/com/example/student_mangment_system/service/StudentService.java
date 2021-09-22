@@ -10,7 +10,7 @@ public interface StudentService {
 
     public Student addStudent(Student student);
 
-    public Student getOneStudent(Long studentId);
+//    public Student getOneStudent(Long studentId);
 
     public void deleteStudent(Long studentId);
 
