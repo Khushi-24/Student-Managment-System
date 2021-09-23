@@ -1,6 +1,6 @@
 package com.example.student_mangment_system.controller;
 
-import com.example.student_mangment_system.entities.Student;
+import com.example.student_mangment_system.dto.StudentDto;
 import com.example.student_mangment_system.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,22 +16,22 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/student")
-    public ResponseEntity<List<Student>> getStudent(){
+    public ResponseEntity<List<StudentDto>> getStudent(){
 
-        List<Student> studentList= studentService.getStudent();
-        return new ResponseEntity<List<Student>>(studentList, HttpStatus.OK);
+        List<StudentDto> studentList= studentService.getStudent();
+        return new ResponseEntity<List<StudentDto>>(studentList, HttpStatus.OK);
     }
 
     @PostMapping("/student")
-    public ResponseEntity<Student> addStudent(@RequestBody Student student){
-        Student student1 = studentService.addStudent(student);
-        return new ResponseEntity<Student>(student1, HttpStatus.CREATED);
+    public ResponseEntity<StudentDto> addStudent(@RequestBody StudentDto studentDto){
+        StudentDto studentDto1 = studentService.addStudent(studentDto);
+        return new ResponseEntity<StudentDto>(studentDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/student")
-    public ResponseEntity<Student> updateStudent(@RequestBody Student student){
-        Student update_student= studentService.updateStudent(student);
-        return new ResponseEntity<Student>(update_student, HttpStatus.CREATED);
+    public ResponseEntity<StudentDto> updateStudent(@RequestBody StudentDto studentDto){
+        StudentDto update_student= studentService.updateStudent(studentDto);
+        return new ResponseEntity<StudentDto>(studentDto, HttpStatus.CREATED);
     }
 
 

@@ -1,26 +1,27 @@
 package com.example.student_mangment_system.service;
 
-import com.example.student_mangment_system.entities.Course;
+import com.example.student_mangment_system.dto.CourseDto;
+import com.example.student_mangment_system.dto.DeleteCourseDto;
 
 import java.util.List;
 
 public interface CourseService {
 
-    List<Course> getCourses();
+    List<CourseDto> getCourses();
 
-    Course addCourses(Course course);
+    CourseDto addCourses(CourseDto courseDto);
 
     void deleteCourse(Long courseId);
 
-    Course updateCourse(Course course);
+    CourseDto updateCourse(CourseDto courseDto);
 
  //   void addStudentIntoCourse(Long studentId, Long courseId);
 
-    void deleteStudentFromCourse(Long studentId, Long courseId);
+//    void deleteStudentFromCourse(Long studentId, Long courseId);
 
     void deleteCourseByCourseId(Long courseId);
 
-    void addStudentAndTeacherIntoCourse(Long teacherId, Long studentId, Long courseId);
+    void addStudentAndTeacherIntoCourse(DeleteCourseDto deleteCourseDto);
 
-    void deleteStudentAndTeacherFromCourse(Long teacherId, Long studentId, Long courseId);
+    void deleteStudentAndTeacherFromCourse(DeleteCourseDto deleteCourseDto);
 }

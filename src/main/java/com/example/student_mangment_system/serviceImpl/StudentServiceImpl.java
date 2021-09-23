@@ -2,6 +2,7 @@ package com.example.student_mangment_system.serviceImpl;
 
 import com.example.student_mangment_system.customException.BadRequestException;
 import com.example.student_mangment_system.customException.NoRecordFoundException;
+import com.example.student_mangment_system.dto.StudentDto;
 import com.example.student_mangment_system.entities.Student;
 import com.example.student_mangment_system.repository.StudentEnrollmentRepository;
 import com.example.student_mangment_system.repository.StudentRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,27 +23,39 @@ public class StudentServiceImpl implements StudentService {
     private final StudentEnrollmentRepository studentEnrollmentRepository;
 
     @Override
-    public List<Student> getStudent() {
-        List<Student> student = studentRepository.findAll();
-        if(student.isEmpty()){
+    public List<StudentDto> getStudent() {
+        List<StudentDto> studentDtoList = studentRepository.findAll().stream().map(student ->{
+                StudentDto studentDto = new StudentDto();
+        studentDto.setStudentId(student.getStudentId());
+        studentDto.setStname(student.getStname());
+        studentDto.setDivision(student.getDivision());
+        return studentDto;
+        }).collect(Collectors.toList());
+        if(studentDtoList.isEmpty()){
             throw  new NoRecordFoundException("Student list is empty.");
         }
         else{
-            return student;
+            return studentDtoList;
         }
     }
 
-    @Override
-    public Student addStudent(Student student) {
 
-        if(student.getStname().isEmpty() || student.getStname().isBlank()){
+    @Override
+    public StudentDto addStudent(StudentDto studentDto) {
+        Student student;
+        if(studentDto.getStname().isEmpty() || studentDto.getStname().isBlank()){
             throw new BadRequestException("Please Enter a valid name.");
         }
-        if(student.getDivision().isEmpty() || student.getDivision().isBlank()){
+        if(studentDto.getDivision().isEmpty() || studentDto.getDivision().isBlank()){
             throw new BadRequestException("Please provide division of student");
         }
         else{
-            return studentRepository.save(student);
+            student = new Student();
+            student.setStudentId(studentDto.getStudentId());
+            student.setStname(studentDto.getStname());
+            student.setDivision(studentDto.getDivision());
+            studentRepository.save(student);
+            return null;
         }
 
     }
@@ -53,16 +67,21 @@ public class StudentServiceImpl implements StudentService {
 //    }
 
     @Override
-    public Student updateStudent(Student student) {
-        if(student.getStname().isEmpty() || student.getStname().isBlank()){
+    public StudentDto updateStudent(StudentDto studentDto) {
+        Student student;
+        if(studentDto.getStname().isEmpty() || studentDto.getStname().isBlank()){
             throw new BadRequestException("Please Enter a valid name.");
         }
-        if(student.getDivision().isEmpty() || student.getDivision().isBlank()){
+        if(studentDto.getDivision().isEmpty() || studentDto.getDivision().isBlank()){
             throw new BadRequestException("Please provide division of student");
         }
         else{
+            student = new Student();
+            student.setStudentId(studentDto.getStudentId());
+            student.setStname(studentDto.getStname());
+            student.setDivision(studentDto.getDivision());
             studentRepository.save(student);
-            return student;
+            return null;
         }
     }
 

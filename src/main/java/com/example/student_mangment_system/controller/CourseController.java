@@ -1,6 +1,7 @@
 package com.example.student_mangment_system.controller;
 
-import com.example.student_mangment_system.entities.Course;
+import com.example.student_mangment_system.dto.CourseDto;
+import com.example.student_mangment_system.dto.DeleteCourseDto;
 import com.example.student_mangment_system.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,23 +17,23 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/courses")
-    public ResponseEntity<List<Course>> getCourse(){
-         List<Course> courseList = courseService.getCourses();
-         return new ResponseEntity<List<Course>>(courseList, HttpStatus.OK);
+    public ResponseEntity<?> getCourse(){
+         List<CourseDto> courseList = courseService.getCourses();
+         return new ResponseEntity<List<CourseDto>>(courseList, HttpStatus.OK);
     }
 
     @PostMapping("/courses")
-    public ResponseEntity<?> addCourses(@RequestBody Course course){
+    public ResponseEntity<?> addCourses(@RequestBody CourseDto courseDto){
 
-        Course addCourse= courseService.addCourses(course);
-        return new ResponseEntity<Course>(addCourse, HttpStatus.CREATED);
+        CourseDto addCourse= courseService.addCourses(courseDto);
+        return new ResponseEntity<CourseDto>(addCourse, HttpStatus.CREATED);
 
     }
 
     @PutMapping("/courses")
-    public ResponseEntity<Course> updateCourse(@RequestBody Course course){
-        Course update_course= courseService.updateCourse(course);
-        return new ResponseEntity<Course>(update_course, HttpStatus.CREATED);
+    public ResponseEntity<CourseDto> updateCourse(@RequestBody CourseDto courseDto){
+        CourseDto update_course= courseService.updateCourse(courseDto);
+        return new ResponseEntity<CourseDto>(update_course, HttpStatus.CREATED);
     }
 
 //    @DeleteMapping("/courses/{courseId}")
@@ -54,21 +55,31 @@ public class CourseController {
 //        return ResponseEntity.ok("Student added successfully.");
 //    }
 
-    @GetMapping("/addStudentAndTeacher/{teacherId}/{studentId}/{courseId}")
-    public ResponseEntity<?> addStudentIntoCourse(@PathVariable("teacherId") Long teacherId, @PathVariable("studentId") Long studentId, @PathVariable("courseId") Long courseId) {
-        courseService.addStudentAndTeacherIntoCourse(teacherId, studentId, courseId);
+    @PostMapping("/addStudentAndTeacherToCourse/teacher/student/course")
+    public ResponseEntity<?> addStudentAndTeacherToCourse(@RequestBody DeleteCourseDto deleteCourseDto) {
+        courseService.addStudentAndTeacherIntoCourse(deleteCourseDto);
         return ResponseEntity.ok("Teacher and Student added successfully.");
     }
 
-    @DeleteMapping("/deleteStudent/{studentId}/{courseId}")
-    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable("studentId") Long studentId, @PathVariable("courseId") Long courseId){
-        courseService.deleteStudentFromCourse(studentId, courseId);
-        return ResponseEntity.ok("Student Deleted From Course Successfully");
-    }
+//    @GetMapping("/addStudentAndTeacher/{teacherId}/{studentId}/{courseId}")
+//    public ResponseEntity<?> addStudentAndTeacherToCourse(@PathVariable("teacherId") Long teacherId, @PathVariable("studentId") Long studentId, @PathVariable("courseId") Long courseId) {
+//        courseService.addStudentAndTeacherIntoCourse(teacherId, studentId, courseId);
+//        return ResponseEntity.ok("Teacher and Student added successfully.");
+//    }
 
-    @DeleteMapping("/deleteStudentAndTeacher/{teacherId}/{studentId}/{courseId}")
-    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable("teacherId") Long teacherId, @PathVariable("studentId") Long studentId, @PathVariable("courseId") Long courseId){
-        courseService.deleteStudentAndTeacherFromCourse(teacherId, studentId, courseId);
+
+//    @GetMapping("/addStudentAndTeacherToCourse")
+//    public ResponseEntity<?> addStudentAndTeacherToCourse(@RequestBody CourseDto courseDto, )
+
+    //    @DeleteMapping("/deleteStudent/{studentId}/{courseId}")
+    //    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable("studentId") Long studentId, @PathVariable("courseId") Long courseId){
+    //        courseService.deleteStudentFromCourse(studentId, courseId);
+    //        return ResponseEntity.ok("Student Deleted From Course Successfully");
+    //    }
+
+    @DeleteMapping("/deleteStudentAndTeacher/teacher/student/course")
+    public ResponseEntity<?> deleteStudentFromCourse(@RequestBody DeleteCourseDto deleteCourseDto){
+        courseService.deleteStudentAndTeacherFromCourse(deleteCourseDto);
         return ResponseEntity.ok("Student And Teacher Deleted From Course Successfully");
     }
 

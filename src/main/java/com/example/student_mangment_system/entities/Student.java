@@ -1,20 +1,19 @@
 package com.example.student_mangment_system.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Getter
+@Setter
 
 @Table(name="student")
 public class Student {

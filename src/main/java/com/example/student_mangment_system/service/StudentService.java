@@ -1,20 +1,20 @@
 package com.example.student_mangment_system.service;
 
-import com.example.student_mangment_system.entities.Student;
+import com.example.student_mangment_system.dto.StudentDto;
 
 import java.util.List;
 
 public interface StudentService {
 
-    public List<Student> getStudent();
+    public List<StudentDto> getStudent();
 
-    public Student addStudent(Student student);
+    public StudentDto addStudent(StudentDto studentdto);
 
 //    public Student getOneStudent(Long studentId);
 
     public void deleteStudent(Long studentId);
 
-    public Student updateStudent(Student student);
+    public StudentDto updateStudent(StudentDto studentDto);
 
     void deleteStudentByStudentId(Long studentId);
 }
